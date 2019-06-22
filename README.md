@@ -20,7 +20,7 @@ sudo apt-get install libncurses5-dev libncursesw5-dev
 g++ -std="c++17" main.cpp -lncurses
 ./a.out
 ```
-5. In case of error that looks like the following: 
+5. In case of error that looks like the following:
 ```
 root@77e30fca8a01:/home/workspace/CppND-Object-Oriented# ./a.out
 *** %n in writable segment detected ***
