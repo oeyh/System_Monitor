@@ -1,4 +1,10 @@
+#ifndef PROCESS_H
+#define PROCESS_H
+
+#include "ProcessParser.h"
 #include <string>
+#include <sstream>
+#include <ios>
 
 using namespace std;
 /*
@@ -23,16 +29,22 @@ public:
         //complete for cmd
         //complete for upTime
         //complete for cpu
+        this->cmd = ProcessParser::getCmd(pid);
+        this->mem = ProcessParser::getVmSize(pid);
+        this->upTime = ProcessParser::getProcUpTime(pid);
+        this->cpu = ProcessParser::getCpuPercent(pid);
+
     }
     void setPid(int pid);
-    string getPid()const;
-    string getUser()const;
-    string getCmd()const;
-    int getCpu()const;
-    int getMem()const;
-    string getUpTime()const;
+    string getPid() const;
+    string getUser() const;
+    string getCmd() const;
+    int getCpu() const;
+    int getMem() const;
+    string getUpTime() const;
     string getProcess();
 };
+
 void Process::setPid(int pid){
     this->pid = pid;
 }
@@ -46,5 +58,36 @@ string Process::getProcess(){
     this->upTime = ProcessParser::getProcUpTime(this->pid);
     this->cpu = ProcessParser::getCpuPercent(this->pid);
 
-    return (this->pid + "   " + //TODO: finish the string! this->user + "   "+ mem...cpu...upTime...;
+    // use string stream to format string
+    std::ostringstream oss;
+
+    // first line
+    oss.flags(std::ios::left);
+    oss.width(7);
+    oss << this->pid;
+
+    oss.width(7);
+    oss << this->user;
+
+    oss.width(10);
+    oss << this->mem.substr(0, 5);
+
+    oss.width(9);
+    oss << this->cpu.substr(0, 5);
+
+    oss.width(9);
+    oss << this->upTime.substr(0, 5);
+
+    oss << (this->cmd.substr(0, 30) + "...");
+
+    // return (this->pid + "   "
+    //                 + this->user + "    "
+    //                 + this->mem.substr(0, 5) + "    "
+    //                 + this->cpu.substr(0, 5) + "    "
+    //                 + this->upTime.substr(0, 5) + "     "
+    //                 + this->cmd.substr(0, 30) + "...");
+
+    return oss.str();
 }
+
+#endif
